@@ -12,7 +12,6 @@ import '../models/user.dart';
 class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -42,35 +41,39 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     IconButton isNotLogged = IconButton(
-    onPressed: () async {
-          await Navigator.of(context).pushNamed(
+        onPressed: () async {
+          await Navigator.of(context)
+              .pushNamed(
             '/login',
             arguments: _users,
-          ).then((loggedUser) {
+          )
+              .then((loggedUser) {
             if (loggedUser != null) {
               setState(() => UserData.currentUser = loggedUser as String);
             }
           });
         },
-    icon: const Icon(Icons.person_outline)
-  );
+        icon: const Icon(Icons.person_outline));
 
-  var isLogged = IconButton(
-    onPressed: () async {
-      await Navigator.of(context).pushNamed(
-        '/user',
-        arguments: _users[_users.indexWhere((element) => element.id == UserData.currentUser)],
-      ).then((value) {
-        if (value != null && UserData.currentUser != '') {
-          var user = value as User;
-          _users[_users.indexWhere((element) => element.id == UserData.currentUser)] = user;
-        }
-        setState(() {});
-      });
-    },
-    icon: const Icon(Icons.person)
-  );
-  
+    var isLogged = IconButton(
+        onPressed: () async {
+          await Navigator.of(context)
+              .pushNamed(
+            '/user',
+            arguments: _users[_users
+                .indexWhere((element) => element.id == UserData.currentUser)],
+          )
+              .then((value) {
+            if (value != null && UserData.currentUser != '') {
+              var user = value as User;
+              _users[_users.indexWhere(
+                  (element) => element.id == UserData.currentUser)] = user;
+            }
+            setState(() {});
+          });
+        },
+        icon: const Icon(Icons.person));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('BuyIt'),
@@ -78,17 +81,22 @@ class _HomeScreenState extends State<HomeScreen> {
           UserData.currentUser == '' ? isNotLogged : isLogged,
         ],
       ),
-      body: Column(
-        children: [
-          _stores.isNotEmpty ? StoreList(storeList: _stores) : const Text('Nenhuma loja cadastrada')
-        ]),
+      body: Column(children: [
+        _stores.isNotEmpty
+            ? StoreList(storeList: _stores)
+            : const Text('Nenhuma loja cadastrada')
+      ]),
       floatingActionButton: FloatingActionButton(
-        onPressed: UserData.currentUser == '' ? null : () {
-          Navigator.pushNamed(context, '/user/history');
-        },
+        onPressed: UserData.currentUser == ''
+            ? null
+            : () {
+                Navigator.pushNamed(context, '/user/history');
+              },
+        backgroundColor: UserData.currentUser == ''
+            ? Colors.blueGrey
+            : Colors.lightBlueAccent,
         child: const Icon(Icons.shopping_cart_checkout),
       ),
     );
   }
-
 }
